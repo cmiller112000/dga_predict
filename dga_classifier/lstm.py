@@ -15,10 +15,10 @@ def build_model(max_features, maxlen):
     """Build LSTM model"""
     model = Sequential()
     model.add(Embedding(max_features, 128, input_length=maxlen))
-    model.add(Dropout(0.5))
+    model.add(Dropout(0.2))
     model.add(LSTM(128))
 #    model.add(Dropout(0.5))
-    model.add(Dropout(0.5))
+    model.add(Dropout(0.2))
 
     model.add(Dense(1))
     model.add(Activation('sigmoid'))

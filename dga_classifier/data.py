@@ -42,6 +42,7 @@ maxSitesNumber = 10000
 # Our ourput file containg all the training data
 DATA_FILE = 'traindata.pkl'
 IN_DATA_FILE = 'Data_File1'
+IN_HACKATHON_FILE = '/home/cher/participantTrainData_wfeatures.csv'
 
 def get_alexa(num, address=ALEXA_1M, filename=tmpAlexaZipFileContents):
     """Grabs Alexa 1M"""
@@ -175,7 +176,18 @@ def gen_data(force=False):
           already exists
     """
     if force or (not os.path.isfile(DATA_FILE)):
-        if not os.path.isfile(IN_DATA_FILE):
+        if os.path.isfile(IN_HACKATHON_FILE):
+            labels = []
+            domains = []
+            with open(IN_HACKATHON_FILE) as csvfile:
+                csvreader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
+                for row in csvreader:
+                    if row['type'] == 'non-generated':
+                        labels.append('benign')
+                    else:
+                        labels.append(row['type'])
+                    domains.append(row['domain'])
+        elif not os.path.isfile(IN_DATA_FILE):
             domains, labels = gen_malicious(maxSitesNumber)
 
             # Get equal number of benign/malicious
